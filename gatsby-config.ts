@@ -29,7 +29,10 @@ const config: GatsbyConfig = {
       "path": "./src/pages/"
     },
     __key: "pages"
-  }]
+  },
+    'gatsby-plugin-postcss'
+  ],
+  pathPrefix: "/website",
 };
 
 export default config;
