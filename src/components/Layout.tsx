@@ -25,22 +25,19 @@ export const Layout = ({children}: LayoutProps) => {
                 <div className="w-full hidden lg:block lg:flex lg:flex-row lg:justify-end lg:w-auto">
                     <div className="lg:flex lg:flex-row text-sm divide-y lg:divide-y-0 lg:divide-x divide-amber-500">
                         <div className="lg:w-24 text-center">
-                            <a href="#responsive-header"
-                               className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white">
+                            <Link to="/orchestre">
                                 L'orchestre
-                            </a>
+                            </Link>
                         </div>
                         <div className="lg:w-24 text-center">
-                            <a href="#responsive-header"
-                               className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white">
+                            <Link to="/concerts">
                                 Concerts
-                            </a>
+                            </Link>
                         </div>
                         <div className="lg:w-24 text-center">
-                            <a href="#responsive-header"
-                               className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white">
+                            <Link to="/contact">
                                 Contact
-                            </a>
+                            </Link>
                         </div>
                         <div className="lg:w-24 text-center">
                             <Link to="/membres">Membres</Link>

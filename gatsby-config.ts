@@ -3,7 +3,7 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `Orchestre H2O`,
-    siteUrl: `https://www.yourdomain.tld`
+    siteUrl: `https://www.orchestre-h2o.fr`
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
@@ -12,7 +12,7 @@ const config: GatsbyConfig = {
   plugins: [{
     resolve: 'gatsby-source-contentful',
     options: {
-      "accessToken": "PX5lNJLqnj8Vuj7SevugK4KbjB59P0UolfwDm2vuFvc",
+      "accessToken": "PX5lNJLqnj8Vuj7SevugK4KbjB59P0UolfwDm2vuFvc ",
       "spaceId": "1e7k9fp4vkil"
     }
   }, "gatsby-plugin-image", "gatsby-plugin-sharp", "gatsby-transformer-sharp", "gatsby-plugin-vanilla-extract", "gatsby-plugin-sitemap", "gatsby-plugin-mdx", {
@@ -31,9 +31,6 @@ const config: GatsbyConfig = {
     __key: "pages"
   },
     'gatsby-plugin-postcss',
-    `gatsby-plugin-image`,
-    `gatsby-plugin-sharp`,
-    `gatsby-transformer-sharp`,
   ],
   pathPrefix: "/website",
 };

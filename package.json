@@ -17,6 +17,7 @@
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.0.1",
     "@mdx-js/react": "^2.3.0",
     "@vanilla-extract/css": "^1.11.0",
     "@vanilla-extract/webpack-plugin": "^2.2.0",
