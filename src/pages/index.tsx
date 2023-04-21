@@ -4,7 +4,7 @@ import {Layout} from "../components/Layout";
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
-    <Layout title={"home"}>
+    <Layout>
       <h1>Main page</h1>
     </Layout>
   )
