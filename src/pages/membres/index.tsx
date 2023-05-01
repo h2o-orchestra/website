@@ -32,10 +32,11 @@ type Nodes = {
 
 function getDriveLink(links: Array<Nodes>, instrument: string): string {
     console.log(`Searching for ${instrument}`, links)
-    return links.find(item => item.node.instrument === instrument)?.node.lien
+    return links.find(item => item.node.instrument === instrument)?.node.lien as string
 }
 
 const MemberPage: () => JSX.Element = () => {
+
     const {allContentfulDrive} = useStaticQuery(graphql`
   query {
   allContentfulDrive {
@@ -66,7 +67,9 @@ const MemberPage: () => JSX.Element = () => {
             <div className="prose prose-invert">
                 <h1>Bienvenue {user?.name}</h1>
                 <p>{quote}</p>
-                <a href={link}>Partitions</a>
+                {link !== 'none' &&
+                    <a href={link}>Partitions</a>
+                }
             </div>
         </Layout>
     )

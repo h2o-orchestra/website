@@ -1,11 +1,14 @@
 import * as React from "react"
 import type { HeadFC, PageProps } from "gatsby"
 import {Layout} from "../components/Layout";
+import {NextConcert} from "../components/NextConcert";
 
 const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout>
-      <h1>Main page</h1>
+        <div className="bg-main-back bg-no-repeat bg-center bg-content h-1/2">
+            <NextConcert />
+        </div>
     </Layout>
   )
 }

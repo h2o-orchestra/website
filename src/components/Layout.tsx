@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from "gatsby";
 import {StaticImage} from "gatsby-plugin-image";
+import LoginLink from "./LoginLink";
 
 type LayoutProps = {
     children: React.ReactNode
@@ -8,10 +9,10 @@ type LayoutProps = {
 
 export const Layout = ({children}: LayoutProps) => {
     return (
-        <div className="flex flex-col h-screen">
+        <div className="container mx-auto flex flex-col h-screen">
             <nav className="flex items-center justify-between flex-wrap p-6">
                 <div className="flex items-center flex-shrink-0 text-white mr-6">
-                    <StaticImage src="../images/logo-circle.png" alt="H2O Logo" width={80}/>
+                    <StaticImage src="../images/logo-circle.svg" alt="H2O Logo" width={80}/>
                 </div>
                 <div className="block lg:hidden">
                     <button
@@ -40,7 +41,7 @@ export const Layout = ({children}: LayoutProps) => {
                             </Link>
                         </div>
                         <div className="lg:w-24 text-center">
-                            <Link to="/membres">Membres</Link>
+                            <LoginLink />
                         </div>
                     </div>
                 </div>

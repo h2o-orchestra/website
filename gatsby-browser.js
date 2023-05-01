@@ -14,7 +14,7 @@ export const wrapRootElement = ({ element }) => {
         <Auth0Provider
             domain={process.env.AUTH0_DOMAIN}
             clientId={process.env.AUTH0_CLIENTID}
-            redirectUri={window.location.origin}
+            redirect_uri={window.location.origin}
             onRedirectCallback={onRedirectCallback}
         >
             {element}
