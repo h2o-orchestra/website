@@ -8,7 +8,7 @@ function LoginLink() {
     } = useAuth0();
 
     return !isAuthenticated && (
-        <a href="#" onClick={loginWithRedirect}>Membres</a>
+        <a href="#" className="px-6 flex-1 text-center" onClick={loginWithRedirect}>Membres</a>
     );
 };
 

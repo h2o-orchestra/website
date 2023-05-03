@@ -12,6 +12,8 @@ type MemberProps = {
 const instrumentMessage: Map<string, Array<string>> = new Map([
     ["trompette", ["Un trompettiste ! Trois piston et deux neurones :)",
         "Toux sèche, trompette de la mort."]],
+    ["clarinette", ["Je me suis remis à la clarinette. C’est ce qui rapproche le plus de l’anglais. - Raymond Devos",
+        "Clarinette. Instrument de torture utilisé par une personne qui a du coton dans les oreilles. Il y a deux instruments qui sont pires qu’une clarinette - deux clarinettes. - Ambrose Bierce"]],
 ]);
 
 function getQuote(instrument: string): string {
