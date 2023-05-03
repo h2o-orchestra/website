@@ -7,9 +7,12 @@ function LoginLink() {
         loginWithRedirect,
     } = useAuth0();
 
-    return !isAuthenticated && (
-        <a href="#" className="px-6 flex-1 text-center" onClick={loginWithRedirect}>Membres</a>
-    );
+    if (isAuthenticated) {
+        return (<a href="#" className="px-6 flex-1 text-center" onClick={loginWithRedirect}>Membres</a>);
+    }
+    else {
+        return (<a>Logout</a>);
+    }
 };
 
 export default LoginLink;

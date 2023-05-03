@@ -20,7 +20,9 @@ const NavBar: () => React.ReactNode = () => {
               <Link to="/contact" className="px-6 border-r-[1px] border-amber-600 flex-1 text-center">
                   Contact
               </Link>
-              <LoginLink />
+              <Link to="/membres" className="px-6 flex-1 text-center">
+                  Membres
+              </Link>
           </div>
 
       </nav>
