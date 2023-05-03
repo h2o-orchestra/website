@@ -15,7 +15,7 @@ export const wrapRootElement: GatsbyBrowser["wrapRootElement"] = ({ element }) =
             domain={process.env.AUTH0_DOMAIN}
             clientId={process.env.AUTH0_CLIENTID}
             authorizationParams={{
-                redirect_uri: window.location.origin,
+                redirect_uri: window.location.toString(),
             }}
             onRedirectCallback={onRedirectCallback}
         >
