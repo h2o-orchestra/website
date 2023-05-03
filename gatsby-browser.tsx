@@ -10,16 +10,12 @@ const onRedirectCallback = (appState) => {
 };
 
 export const wrapRootElement: GatsbyBrowser["wrapRootElement"] = ({ element }) => {
-    let redirectUri = window.location.origin;
-    if (window.location.pathname.length > 1) {
-        redirectUri += window.location.pathname
-    }
     return (
         <Auth0Provider
             domain={process.env.AUTH0_DOMAIN}
             clientId={process.env.AUTH0_CLIENTID}
             authorizationParams={{
-                redirect_uri: redirectUri,
+                redirect_uri: window.location.href,
             }}
             onRedirectCallback={onRedirectCallback}
         >
