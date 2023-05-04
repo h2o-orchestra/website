@@ -32,7 +32,7 @@ const config: GatsbyConfig = {
   },
     'gatsby-plugin-postcss',
   ],
-  pathPrefix: "/website",
+  pathPrefix: "/",
 };
 
 export default config;
