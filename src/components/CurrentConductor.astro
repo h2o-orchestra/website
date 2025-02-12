@@ -1,0 +1,16 @@
+---
+import {type Chef} from "../lib/contentful";
+interface Props {
+    name: string
+    resume: string
+    portrait: string | undefined
+}
+
+const {name, resume, portrait} = Astro.props
+---
+
+<div >
+<h2>{name}</h2>
+    <p set:html={resume}></p>
+    <img src={portrait} alt="direction  musicale"/>
+</div>

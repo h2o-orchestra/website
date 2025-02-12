@@ -1,0 +1,7 @@
+---
+import {contentfulClient, type Orchestre} from "../../lib/contentful";
+
+const entries = await contentfulClient.getEntries<Orchestre>({
+    content_type: "chef",
+});
+---

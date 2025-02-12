@@ -1,0 +1,37 @@
+---
+import {type Concert, contentfulClient} from "../../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import Layout from "../../layouts/Layout.astro";
+export async function getStaticPaths() {
+    const entries = await contentfulClient.getEntries<Concert>({
+        content_type: "concert",
+    });
+
+    return entries.items.map((item) => {
+        return (
+            {
+                params: {slug: decodeURI(item.fields.title)},
+                props: {
+                    title: item.fields.title,
+                    date: item.fields.date,
+                    description: documentToHtmlString(item.fields.description),
+                    price: item.fields.price,
+                    location: item.fields.location,
+                },
+            })
+    });
+}
+
+const {title, date, description, price, location} = Astro.props;
+
+---
+
+<Layout>
+    <h1>{title}</h1>
+    <time>{new Date(date).toLocaleDateString("fr-FR")}</time>
+    <article set:html={description} />
+    <p>{price}</p>
+    <p>{location}</p>
+
+    <img src=`https://maps.geoapify.com/v1/staticmap?style=osm-bright-smooth&width=600&height=400&center=lonlat%3A${location.lon}%2C${location.lat}&marker=lonlat:${location.lon},${location.lat};color:%23ff0000&zoom=16&apiKey=9f6d039317ef41f485a9dad143e95d4b` alt="Carte de l'emplacement du concert" />
+</Layout>

@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {contentfulClient, type Orchestre} from "../lib/contentful";
+import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
+
+const entries = await contentfulClient.getEntries<Orchestre>({
+    content_type: "orchestre",
+});
+
+const orchestre = await Promise.all(entries.items.map(async entry => ({
+    title: entry.fields.title,
+    description: documentToHtmlString(entry.fields.description),
+    hero: (await contentfulClient.getAsset(entry.fields.hero.sys.id)).fields.file?.url
+})))
+---
+
+<Layout title="H2O - L'Orchestre">
+    <h2>L'Orchestre</h2>
+    {orchestre.map(entry => (
+                    <img src=`${entry.hero}` alt="orchestre h2o"/>
+                    <p set:html={entry.description}></p>
+        )
+    )}
+</Layout>

@@ -1,11 +1,35 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import {allChef, allConcerts, contentfulClient} from "../lib/contentful";
+import {getSeason} from "../lib/seasons";
+import Hero from '../components/hero.vue';
+import CurrentConductor from "../components/CurrentConductor.astro";
+import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const concerts = allConcerts.items.map((item) => {
+    const {title, date, description, price} = item.fields;
+    let concertDate = new Date(date);
+    return {
+        title,
+        description,
+        price,
+        date: concertDate,
+        season: getSeason(concertDate),
+    };
+});
+
+const seasons = [...new Set(concerts.map((concert) => concert.season))];
+
+const nextConcerts = concerts.filter((concert) => concert.date > new Date());
+
+const currentConductor = (await Promise.all(allChef.items.filter(chef => chef.fields.courant).map(async chef => ({
+    name: chef.fields.name,
+    resume: documentToHtmlString(chef.fields.resume),
+    portrait: (await contentfulClient.getAsset(chef.fields.portrait.sys.id)).fields.file?.url
+}))))[0]
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="H2O - Orchestre d'harmonie">
+    <Hero client:load seasons={seasons}/>
+    <CurrentConductor name={currentConductor.name} resume={currentConductor.resume} portrait={currentConductor.portrait} />
 </Layout>

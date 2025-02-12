@@ -1,0 +1,44 @@
+---
+import {contentfulClient} from "../../lib/contentful";
+import type {Concert} from "../../lib/contentful";
+import {getSeason} from "../../lib/seasons";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+    const entries = await contentfulClient.getEntries<Concert>({
+        content_type: "concert",
+    });
+
+    const seasons = [...new Set(entries.items.map((entry) => getSeason(new Date(entry.fields.date))))];
+
+    return seasons.map((item) => {
+        return (
+            {
+                params: {slug: item},
+                props: {
+                    season: item,
+                },
+            })
+    });
+}
+
+const {season} = Astro.props;
+
+const concerts = await contentfulClient.getEntries<Concert>({
+        content_type: "concert",
+    }
+)
+
+const concertsBySeason = concerts.items.filter((item) => getSeason(new Date(item.fields.date)) === season);
+---
+
+<Layout>
+    {concertsBySeason.map((concert) => (
+        <li>
+            <a href={`/concert/${encodeURI(concert.fields.title)}`}>
+                <h2>{concert.fields.title}</h2>
+            </a>
+            <time>{new Date(concert.fields.date).toLocaleDateString("fr-FR")}</time>
+        </li>
+    ))}
+</Layout>
