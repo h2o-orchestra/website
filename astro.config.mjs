@@ -11,5 +11,8 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()]
-  }
+  },
+
+  site: 'https://h2o-orchestra.github.io',
+  base: 'website',
 });
