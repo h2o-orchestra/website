@@ -1,3 +1,133 @@
 ---
+import Layout from '../layouts/Layout.astro';
+import { allRecrutements } from '../lib/contentful';
 
 ---
+
+<Layout title="Recrutement" activeNav="recrutement">
+    <!-- Hero section -->
+    <div class="bg-gradient-to-r from-pumpkin-500 to-pumpkin-700 py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Rejoignez l'Orchestre H²O</h1>
+                <p class="text-xl text-pumpkin-100">Partagez notre passion pour la musique d'harmonie et intégrez une formation musicale dynamique et conviviale.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main content -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">Pourquoi nous rejoindre ?</h2>
+                
+                <div class="prose prose-lg max-w-none text-gray-700 mb-12">
+                    <p>L'Orchestre H²O est une formation d'harmonie amateur Toulousaine fondée en 2011. Notre orchestre réunit des musiciens passionnés autour d'un répertoire varié allant de la musique classique aux œuvres contemporaines.</p>
+                    <p class="mt-4">Rejoindre l'Orchestre H²O, c'est :</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-pumpkin-100 text-pumpkin-700 rounded-full p-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Pratiquer la musique à bon niveau</h3>
+                                <p class="text-gray-700">Développez votre pratique musicale au sein d'une formation complète et ambitieuse, sous la direction de chefs talentueux.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-pumpkin-100 text-pumpkin-700 rounded-full p-3">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Intégrer une communauté</h3>
+                                <p class="text-gray-700">Rejoignez un groupe de musiciens passionnés et créez des liens durables autour de la musique et de projets communs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Organization info -->
+                <h2 class="text-3xl font-bold text-gray-900 mb-6">Organisation</h2>
+                
+                <div class="prose prose-lg max-w-none text-gray-700 mb-8">
+                    <ul>
+                        <li><strong>Répétitions :</strong> Une fois par mois le Dimanche de 09h00 à 17h a l'école de musique d'Aussonne</li>
+                        <li><strong>Supplémentaires :</strong> Un week-end de travail peut être organisé pendant la session en fonction du besoin</li>
+                        <li><strong>Concerts :</strong> 3 à 4 concerts par session (deux sessions par an)</li>
+                    </ul>
+                    <br/>
+                    Toutes les dates de concerts et de répétitions sont disponibles très en avance et communiquées à l'ensemble des musiciens. 
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Open positions -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">Postes actuellement ouverts</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                    {allRecrutements.items.map(r => {
+                        return <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-pumpkin-500">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-semibold text-gray-900">{r.fields.instrument}</h3>
+                            <span class="inline-block px-2 py-1 bg-pumpkin-100 text-pumpkin-800 text-xs font-medium rounded-full">{r.fields.postesOuverts} postes</span>
+                        </div>
+                        <p class="text-gray-700 mb-3">{r.fields.description}</p>
+                        <a href="#application" class="text-pumpkin-600 hover:text-pumpkin-800 font-medium">
+                            Postuler →
+                        </a>
+                    </div>
+                    })}
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-sm">
+                    <p class="text-gray-700 mb-4">Si votre instrument n'est pas mentionné, nous vous invitons quand même à nous contacter. Nous constituons régulièrement une liste d'attente pour les postes qui se libèrent en cours d'année.</p>
+                    <a href="#application" class="text-pumpkin-600 hover:text-pumpkin-800 font-medium">
+                        Candidature spontanée →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Application process -->
+    <section id="application" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">Comment postuler ? C'est très simple.</h2>
+                
+                <div class="bg-gray-50 p-8 rounded-xl mb-12">
+                    <ol class="space-y-8">
+                        <li class="flex gap-4">
+                            <div class="flex-shrink-0 bg-pumpkin-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-medium">1</div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Envoyez votre candidature</h3>
+                                <p class="text-gray-700">Envoyez nous un mail à <a class="text-pumpkin-700" href="mailto:contact@orchestre-h2o.fr">contact@orchestre-h2o.fr</a> ou bien par téléphone au 06 62 74 07 28.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="flex-shrink-0 bg-pumpkin-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-medium">2</div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900 mb-2">Vous recevez une réponse</h3>
+                                <p class="text-gray-700">Si votre profil correspond à nos besoins, nous vons invitons à nous rejoindre lors de la session suivante.</p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>

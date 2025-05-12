@@ -1,35 +1,121 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import {allChef, allConcerts, contentfulClient} from "../lib/contentful";
+import {allChef, concerts, seasons, contentfulClient, allOrchestre, nextConcerts} from "../lib/contentful";
 import {getSeason} from "../lib/seasons";
-import Hero from '../components/hero.vue';
+import Welcome from '../components/Welcome.astro';
 import CurrentConductor from "../components/CurrentConductor.astro";
+import NextConcert from "../components/NextConcert.astro";
+import Orchestra from "../components/Orchestra.astro";
 import {documentToHtmlString} from "@contentful/rich-text-html-renderer";
 
-const concerts = allConcerts.items.map((item) => {
-    const {title, date, description, price} = item.fields;
-    let concertDate = new Date(date);
-    return {
-        title,
-        description,
-        price,
-        date: concertDate,
-        season: getSeason(concertDate),
-    };
-});
 
-const seasons = [...new Set(concerts.map((concert) => concert.season))];
 
-const nextConcerts = concerts.filter((concert) => concert.date > new Date());
 
+// Get the current conductor
 const currentConductor = (await Promise.all(allChef.items.filter(chef => chef.fields.courant).map(async chef => ({
     name: chef.fields.name,
     resume: documentToHtmlString(chef.fields.resume),
     portrait: (await contentfulClient.getAsset(chef.fields.portrait.sys.id)).fields.file?.url
-}))))[0]
+}))))[0];
+
+// Prepare next concert data or use fallback if none
+const nextConcert = nextConcerts.length > 0 ? nextConcerts[0] : {
+    title: null,
+    description: null,
+    date: null,
+    price: -1,
+    poster: null,
+};
+
+
+// Orchestra information
+const orchestraInfo = {
+    title: allOrchestre.items[0].fields.title,
+    description: documentToHtmlString(allOrchestre.items[0].fields.resume)
+};
 ---
 
-<Layout title="H2O - Orchestre d'harmonie">
-    <Hero client:load seasons={seasons}/>
-    <CurrentConductor name={currentConductor.name} resume={currentConductor.resume} portrait={currentConductor.portrait} />
+<Layout title="Accueil">
+    <!-- Welcome banner -->
+    <Welcome currentSeason={seasons[0]} />
+    
+    <!-- Main content with bento box layout -->
+    <section class="py-12 md:py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Découvrez notre univers musical</h2>
+            
+            <!-- Bento box grid layout -->
+            <div class="grid grid-cols-1 gap-6">
+                <!-- Next concert (spans full width on all devices) -->
+                <div class="w-full">
+                    <NextConcert 
+                        title={nextConcert.title}
+                        description={nextConcert.description}
+                        date={nextConcert.date}
+                        price={nextConcert.price}
+                        poster={nextConcert.poster}
+                        currentSeason={seasons[0]}
+                    />
+                </div>
+                
+                <!-- Conductor and Orchestra info (two columns on large screens) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Conductor info -->
+                    <div class="flex flex-col h-full">
+                        <CurrentConductor 
+                            name={currentConductor.name} 
+                            resume={currentConductor.resume} 
+                            portrait={currentConductor.portrait} 
+                        />
+                    </div>
+                    
+                    <!-- Orchestra info -->
+                    <div class="flex flex-col h-full">
+                        <Orchestra 
+                            title={orchestraInfo.title}
+                            description={orchestraInfo.description}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Seasons section -->
+    <section class="py-12 md:py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-6">Nos saisons</h2>
+            <p class="text-lg text-center text-gray-600 mb-10 max-w-3xl mx-auto">
+                Découvrez notre programmation musicale à travers nos différentes saisons.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                {seasons.map(season => (
+                    <a 
+                        href={`/saison/${season}`}
+                        class="inline-block px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                        Saison {season}
+                    </a>
+                ))}
+            </div>
+        </div>
+    </section>
+    
+    <!-- Join us CTA section -->
+    <section class="py-16 md:py-24 bg-gradient-to-br from-pumpkin-500 to-pumpkin-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Rejoignez l'Orchestre H²O</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Vous êtes musicien et passionné par la musique orchestrale ? 
+                Découvrez nos opportunités de recrutement et rejoignez notre aventure musicale !
+            </p>
+            <a 
+                href="/recrutement" 
+                class="inline-block px-8 py-4 bg-white text-pumpkin-700 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+            >
+                Comment nous rejoindre
+            </a>
+        </div>
+    </section>
 </Layout>

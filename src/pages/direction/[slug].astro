@@ -1,7 +1,142 @@
 ---
-import {contentfulClient, type Orchestre} from "../../lib/contentful";
+import Layout from '../../layouts/Layout.astro';
+import {contentfulClient, type Chef} from "../../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 
-const entries = await contentfulClient.getEntries<Orchestre>({
-    content_type: "chef",
-});
+export async function getStaticPaths() {
+    // Fetch all chef entries from Contentful
+    const chefEntries = await contentfulClient.getEntries<Chef>({
+        content_type: "chef",
+    });
+
+    // Create a path for each chef
+    const paths = await Promise.all(chefEntries.items.map(async (chef) => {
+        const portraitUrl = chef.fields.portrait?.sys?.id 
+            ? (await contentfulClient.getAsset(chef.fields.portrait.sys.id)).fields.file?.url
+            : undefined;
+            
+        return {
+            params: { 
+                slug: chef.fields.courant ? 'current' : chef.fields.name.toLowerCase().replace(/\s+/g, '-') 
+            },
+            props: { 
+                chef: {
+                    name: chef.fields.name,
+                    resume: documentToHtmlString(chef.fields.resume),
+                    description: documentToHtmlString(chef.fields.description),
+                    portrait: portraitUrl,
+                    isCurrent: chef.fields.courant
+                }
+            }
+        };
+    }));
+    
+    return paths;
+}
+
+const { chef } = Astro.props;
 ---
+
+<Layout title={`${chef.name} - Direction Musicale`} activeNav="direction">
+    <!-- Hero Section with Conductor Portrait -->
+    <div class="bg-gradient-to-tr from-pumpkin-200 to-pumpkin-400 py-16 md:py-24">
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <!-- Conductor portrait -->
+                <div class="md:w-1/3 mb-8 md:mb-0">
+                    {chef.portrait ? (
+                        <img 
+                            src={chef.portrait} 
+                            alt={`${chef.name} - Chef d'orchestre`} 
+                            class="w-full max-w-md mx-auto rounded-xl shadow-xl object-cover aspect-[3/4]"
+                        />
+                    ) : (
+                        <div class="w-full max-w-md mx-auto rounded-xl bg-gray-200 aspect-[3/4] flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                    )}
+                </div>
+                
+                <!-- Conductor info -->
+                <div class="md:w-2/3 text-white">
+                    {chef.isCurrent && (
+                        <div class="inline-block px-3 py-1 bg-pumpkin-500 text-white text-sm font-medium rounded-full mb-4">
+                            Chef actuel
+                        </div>
+                    )}
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">{chef.name}</h1>
+                    <div class="prose prose-lg prose-invert max-w-none">
+                        <div set:html={chef.resume}></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Detailed biography -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">Biographie</h2>
+                <div class="prose prose-lg prose-h3:text-h2o-blue prose-h3:font-semibold max-w-none">
+                    <div set:html={chef.description}></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Previous conductors or related content -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-bold text-gray-900 mb-8">
+                    {chef.isCurrent ? 'Prochains concerts' : 'Direction actuelle'}
+                </h2>
+                
+                {chef.isCurrent ? (
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="text-sm text-pumpkin-500 font-medium mb-2">15 Mai 2025</div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Beethoven & Strauss</h3>
+                            <p class="text-gray-700 mb-4">Un programme exceptionnel mettant en vedette les œuvres de ces deux compositeurs majeurs.</p>
+                            <a href="/concert/beethoven-strauss" class="text-h2o-blue hover:underline font-medium">
+                                En savoir plus →
+                            </a>
+                        </div>
+                        
+                        <div class="bg-white p-6 rounded-xl shadow-md">
+                            <div class="text-sm text-pumpkin-500 font-medium mb-2">23 Juin 2025</div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Concert d'été</h3>
+                            <p class="text-gray-700 mb-4">Une soirée estivale remplie de pièces légères et joyeuses pour célébrer l'arrivée de l'été.</p>
+                            <a href="/concert/concert-ete" class="text-h2o-blue hover:underline font-medium">
+                                En savoir plus →
+                            </a>
+                        </div>
+                    </div>
+                ) : (
+                    <div class="bg-white p-6 rounded-xl shadow-md flex flex-col md:flex-row gap-6">
+                        <div class="md:w-1/4">
+                            <img 
+                                src="/chef-actuel.jpg" 
+                                alt="Chef d'orchestre actuel" 
+                                class="w-full rounded-lg object-cover aspect-[3/4]"
+                            />
+                        </div>
+                        <div class="md:w-3/4">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Découvrez notre chef d'orchestre actuel</h3>
+                            <p class="text-gray-700 mb-4">
+                                L'Orchestre H²O est actuellement dirigé par un chef talentueux qui insuffle une nouvelle énergie à nos productions musicales.
+                            </p>
+                            <a href="/direction/current" class="text-h2o-blue hover:underline font-medium">
+                                En savoir plus →
+                            </a>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    </section>
+</Layout>

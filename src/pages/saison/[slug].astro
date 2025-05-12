@@ -1,8 +1,9 @@
 ---
-import {contentfulClient} from "../../lib/contentful";
+import {contentfulClient, concerts} from "../../lib/contentful";
 import type {Concert} from "../../lib/contentful";
 import {getSeason} from "../../lib/seasons";
 import Layout from "../../layouts/Layout.astro";
+import { truncateDescription } from "../../lib/string";
 
 export async function getStaticPaths() {
     const entries = await contentfulClient.getEntries<Concert>({
@@ -24,21 +25,79 @@ export async function getStaticPaths() {
 
 const {season} = Astro.props;
 
-const concerts = await contentfulClient.getEntries<Concert>({
-        content_type: "concert",
-    }
-)
-
-const concertsBySeason = concerts.items.filter((item) => getSeason(new Date(item.fields.date)) === season);
+const concertsBySeason = concerts.filter((item) => getSeason(new Date(item.date)) === season);
 ---
 
-<Layout>
-    {concertsBySeason.map((concert) => (
-        <li>
-            <a href={`/concert/${encodeURI(concert.fields.title)}`}>
-                <h2>{concert.fields.title}</h2>
-            </a>
-            <time>{new Date(concert.fields.date).toLocaleDateString("fr-FR")}</time>
-        </li>
-    ))}
+<Layout title=`Concerts de la saison ${season}` activeNav="saisons">
+    <div class="bg-gradient-to-b from-gray-50 to-white">
+        <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-h2o-dark mb-3">Saison {season}</h1>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Découvrez tous les concerts de notre orchestre pour cette saison musicale</p>
+            </div>
+            
+            {concertsBySeason.length === 0 ? (
+                <div class="text-center py-12">
+                    <p class="text-lg text-gray-500">Aucun concert programmé pour cette saison.</p>
+                    <a href="/" class="mt-4 inline-block px-6 py-3 bg-h2o-blue text-white rounded-md hover:bg-blue-600 transition-colors">
+                        Retour à l'accueil
+                    </a>
+                </div>
+            ) : (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {concertsBySeason.map((concert) => (
+                        <a 
+                            href={`/concert/${encodeURI(concert.title.toLowerCase().replace(/\s+/g, '-'))}`}
+                            class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+                        >
+                            <div class="relative h-48 bg-gray-200">
+                                {concert.poster ? (
+                                    <img 
+                                        src={`https:${concert.poster.sys?.id ? 
+                                            `/placeholder.png` : 
+                                            `/placeholder.png`}`}
+                                        alt={concert.title}
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                ) : (
+                                    <img 
+                                        src="/placeholder.png" 
+                                        alt="Concert placeholder"
+                                        class="w-full h-full object-cover"
+                                    />
+                                )}
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+                            
+                            <div class="p-6 flex-grow">
+                                <div class="flex items-center mb-3">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-h2o-blue text-white">
+                                        {new Date(concert.date).toLocaleDateString("fr-FR", {day: 'numeric', month: 'long', year: 'numeric'})}
+                                    </span>
+                                </div>
+                                
+                                <h2 class="text-xl font-bold text-h2o-dark group-hover:text-h2o-blue transition-colors duration-300 mb-2">
+                                    {concert.title}
+                                </h2>
+                                
+                                {concert.description && (
+                                    <p class="text-gray-600 line-clamp-3" set:html={truncateDescription(concert.description)}>
+                                    </p>
+                                )}
+                            </div>
+                            
+                            <div class="px-6 pb-4">
+                                <span class="inline-flex items-center text-h2o-blue font-medium group-hover:underline">
+                                    En savoir plus
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </span>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    </div>
 </Layout>
