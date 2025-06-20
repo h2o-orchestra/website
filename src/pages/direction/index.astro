@@ -1,15 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import {contentfulClient, type Chef} from "../../lib/contentful";
+import {contentfulClient, type Chef, allChef} from "../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 
-// Fetch all conductors from Contentful
-const allConductors = await contentfulClient.getEntries<Chef>({
-    content_type: "chef",
-});
 
 // Process the conductors data and sort them (current conductor first, then alphabetically)
-const conductors = await Promise.all(allConductors.items.map(async (conductor) => {
+const conductors = await Promise.all(allChef.items.map(async (conductor) => {
     const portraitUrl = conductor.fields.portrait?.sys?.id 
         ? (await contentfulClient.getAsset(conductor.fields.portrait.sys.id)).fields.file?.url
         : undefined;
@@ -36,7 +32,7 @@ const currentConductor = sortedConductors.find(conductor => conductor.isCurrent)
 
 <Layout title="Direction Musicale - Chefs d'orchestre" activeNav="direction">
     <!-- Hero section -->
-    <div class="bg-gradient-to-r from-pumpkin-500 to-pumpkin-700 py-16 md:py-24">
+    <div class="bg-gradient-to-tr from-pumpkin-300 to-pumpkin-500 py-16 md:py-24">
         <div class="container mx-auto px-4">
             <div class="max-w-3xl">
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Direction Musicale</h1>

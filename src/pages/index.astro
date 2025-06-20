@@ -90,7 +90,7 @@ const orchestraInfo = {
             </p>
             
             <div class="flex flex-wrap justify-center gap-4">
-                {seasons.map(season => (
+                {seasons.slice(0, 3).map(season => (
                     <a 
                         href={`/saison/${season}`}
                         class="inline-block px-6 py-3 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
@@ -103,7 +103,7 @@ const orchestraInfo = {
     </section>
     
     <!-- Join us CTA section -->
-    <section class="py-16 md:py-24 bg-gradient-to-br from-pumpkin-500 to-pumpkin-700 text-white">
+    <section class="py-16 md:py-24 bg-gradient-to-tr from-pumpkin-300 to-pumpkin-500 text-white">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">Rejoignez l'Orchestre H²O</h2>
             <p class="text-xl mb-8 max-w-2xl mx-auto">

@@ -86,7 +86,7 @@ export const concerts = allConcerts.items.map((item) => {
 // Get next concerts (those with dates in the future)
 export const nextConcerts = concerts.filter((concert) => concert.date >= new Date());
 
-export const seasons = [...new Set(concerts.map((concert) => concert.season))];
+export const seasons = [...new Set(concerts.map((concert) => concert.season))].sort((a, b) => b.localeCompare(a));
 
 export const currentSeason = seasons[0];
 

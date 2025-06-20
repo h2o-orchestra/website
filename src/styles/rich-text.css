@@ -1,0 +1,63 @@
+/* Custom styling for Rich Text content from Contentful */
+.custom-rich-text {
+  /* Base styles */
+  line-height: 1.7;
+  
+  /* Add space between paragraphs when they follow each other */
+  & p + p {
+    margin-top: -0.5rem; /* Reduce the double margin between paragraphs */
+  }
+  
+  /* Style links */
+  & a {
+    color: var(--h2o-blue, #0078E8);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  & a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Style lists better */
+  & ul li, & ol li {
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Style for blockquotes */
+  & blockquote {
+    font-style: italic;
+    color: #4a5568;
+    border-left: 4px solid var(--pumpkin-500, #e67e22);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+  }
+  
+  /* Tables */
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+  
+  & th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 2px solid #e2e8f0;
+  }
+  
+  & td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  /* Images */
+  & img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.375rem;
+    margin: 1.5rem 0;
+  }
+}
