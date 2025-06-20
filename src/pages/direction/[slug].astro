@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import {contentfulClient, type Chef, allChef, nextConcerts} from "../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import { renderRichText } from "../../lib/richTextRenderer";
 
 export async function getStaticPaths() {
     // Find the current conductor first
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
         currentConductor = {
             name: currentConductorItem.fields.name,
             resume: documentToHtmlString(currentConductorItem.fields.resume),
-            description: documentToHtmlString(currentConductorItem.fields.description),
+            description: renderRichText(currentConductorItem.fields.description),
             portrait: portraitUrl,
             isCurrent: true,
             slug: 'current'
@@ -37,7 +38,7 @@ export async function getStaticPaths() {
                 chef: {
                     name: chef.fields.name,
                     resume: documentToHtmlString(chef.fields.resume),
-                    description: documentToHtmlString(chef.fields.description),
+                    description: renderRichText(chef.fields.description),
                     portrait: portraitUrl,
                     isCurrent: chef.fields.courant
                 },

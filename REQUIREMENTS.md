@@ -1,4 +1,4 @@
-This is the requirement document for H²O Orchestra website.
+This is the requirement document for H₂O Orchestra website.
 
 | Title | Description                  | Expected behaviour |
 |----------------|----------------------|-------------------|
