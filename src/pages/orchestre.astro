@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { contentfulClient, type Orchestre } from "../lib/contentful";
 import { renderRichText } from "../lib/richTextRenderer";
+import { Image } from 'astro:assets';
+import fondImage from '../../public/fond.jpg';
 
 // Fetch orchestra information from Contentful
 const orchestreEntries = await contentfulClient.getEntries<Orchestre>({
@@ -26,8 +28,8 @@ const orchestreData = {
     <!-- Hero Section with Orchestra Image -->
     <div class="relative h-[60vh] overflow-hidden">
         <div class="absolute inset-0 bg-black/40 z-10"></div>
-        <img 
-            src="/fond.jpg"
+        <Image 
+            src={fondImage}
             alt="Orchestre H²O en concert" 
             class="absolute w-full h-full object-cover"
         />
