@@ -19,7 +19,7 @@ const { currentSeason } = Astro.props;
       <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">Orchestre H²O</h1>
       <p class="text-xl md:text-2xl text-pumpkin-100 mb-8">Bienvenue à l'Orchestre d'Harmonie H²O, une formation musicale Toulousaine passionnée par l'excellence et le partage.</p>
       <div class="flex flex-wrap justify-center gap-4">
-        <a href="/orchestre" class="inline-block bg-white text-pumpkin-600 font-medium py-3 px-6 rounded-lg shadow-md hover:bg-pumpkin-50 transition-colors">
+        <a href={"/orchestre"} class="inline-block bg-white text-pumpkin-600 font-medium py-3 px-6 rounded-lg shadow-md hover:bg-pumpkin-50 transition-colors">
           Découvrir l'orchestre
         </a>
         <a href={`saison/${currentSeason}`} class="inline-block text-white border border-white py-3 px-6 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
