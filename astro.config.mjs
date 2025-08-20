@@ -14,5 +14,5 @@ export default defineConfig({
   },
 
   site: 'https://h2o-orchestra.github.io',
-  base: import.meta.env.DEV ? '' : 'website',
+  base: '',
 });
