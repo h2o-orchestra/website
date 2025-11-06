@@ -25,7 +25,7 @@ const {
     currentSeason
 } = Astro.props;
 
-const hasConcert = Boolean(title && description && date && (price ?? 0) > 0);
+const hasConcert = Boolean(title && description && date && (price ?? 0) >= 0);
 
 // Format date if available
 let formattedDate = '';
@@ -86,21 +86,10 @@ if (date) {
                     
                     <div class="flex items-start gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pumpkin-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-14a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V4z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-gray-700">Durée: 2h environ</span>
-                    </div>
-                    
-                    <div class="flex items-start gap-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pumpkin-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
                         </svg>
-                        <span class="text-gray-700">Prix: {price}€</span>
+                        <span class="text-gray-700">Prix: {price ?? 0 === 0 ? 'Entrée libre' : `${price}€`}</span>
                     </div>
-                </div>
-                
-                <div class="prose prose-sm prose-slate max-w-none mb-6">
-                    <p>{description}</p>
                 </div>
                 
                 <div class="flex flex-wrap gap-3 mt-4">

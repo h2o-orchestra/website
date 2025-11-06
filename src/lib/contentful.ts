@@ -57,6 +57,7 @@ export const contentfulClient = contentful.createClient({
 
 export const allConcerts = await contentfulClient.getEntries<Concert>({
     content_type: "concert",
+    order: ["fields.date"],
 });
 
 export const allChef = await contentfulClient.getEntries<Chef>({
@@ -84,7 +85,9 @@ export const concerts = allConcerts.items.map((item) => {
 });
 
 // Get next concerts (those with dates in the future)
-export const nextConcerts = concerts.filter((concert) => concert.date >= new Date());
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+export const nextConcerts = concerts.filter((concert) => concert.date >= today);
 
 export const seasons = [...new Set(concerts.map((concert) => concert.season))].sort((a, b) => b.localeCompare(a));
 

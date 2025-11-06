@@ -18,6 +18,8 @@ const currentConductor = (await Promise.all(allChef.items.filter(chef => chef.fi
     portrait: (await contentfulClient.getAsset(chef.fields.portrait.sys.id)).fields.file?.url
 }))))[0];
 
+console.log("number of next concerts:", nextConcerts.length);
+
 // Prepare next concert data or use fallback if none
 const nextConcert = nextConcerts.length > 0 ? nextConcerts[0] : {
     title: null,
@@ -26,6 +28,8 @@ const nextConcert = nextConcerts.length > 0 ? nextConcerts[0] : {
     price: -1,
     poster: null,
 };
+
+console.log("Next concert data:", nextConcert);
 
 
 // Orchestra information
