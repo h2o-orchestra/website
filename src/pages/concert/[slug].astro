@@ -10,11 +10,13 @@ export async function getStaticPaths() {
         content_type: "concert",
     });
 
-    return entries.items.map((item) => {
-        // Process the poster URL if it exists
-        const posterUrl = item.fields.poster?.sys?.id 
-            ? `https:${item.fields.poster.fields?.file?.url}` 
-            : "/placeholder.png";
+    return Promise.all(entries.items.map(async (item) => {
+        let posterUrl: string = "/placeholder.png";
+        if (item.fields.poster?.sys?.id) {
+            const asset = await contentfulClient.getAsset(item.fields.poster.sys.id);
+            const url = asset.fields.file?.url;
+            if (url) posterUrl = url.startsWith('//') ? `https:${url}` : url;
+        }
 
         return (
             {
@@ -26,10 +28,10 @@ export async function getStaticPaths() {
                     price: item.fields.price,
                     location: item.fields.location,
                     address: item.fields.address,
-                    poster: posterUrl, // Add poster URL to props
+                    poster: posterUrl,
                 },
             })
-    });
+    }));
 }
 
 const {title, date, description, price, location, address, poster} = Astro.props;
@@ -110,9 +112,11 @@ const otherConcerts = concertsBySeason.filter(c => c.title !== title)
                 
                 {!isPastConcert && (
                     <div class="flex flex-wrap gap-4">
-                        <a href="#tickets" class="inline-block bg-white text-h2o-blue font-medium py-3 px-6 rounded-lg shadow-md hover:bg-blue-50 transition-colors">
-                            Réserver des places
-                        </a>
+                        {price && (
+                            <a href="#tickets" class="inline-block bg-white text-h2o-blue font-medium py-3 px-6 rounded-lg shadow-md hover:bg-blue-50 transition-colors">
+                                Réserver des places
+                            </a>
+                        )}
                         <a href={calendarUrl} download={`concert-h2o-${title.toLowerCase().replace(/\s+/g, '-')}.ics`} class="inline-block bg-transparent text-white border border-white py-3 px-6 rounded-lg hover:bg-white/10 transition-colors">
                             Ajouter au calendrier
                         </a>
@@ -173,7 +177,7 @@ const otherConcerts = concertsBySeason.filter(c => c.title !== title)
                     </div>
                 </div>
                 
-                {!isPastConcert && (
+                {!isPastConcert && price && (
                     <div id="tickets" class="bg-white p-6 rounded-xl shadow-md">
                         <h2 class="text-xl font-semibold text-gray-900 mb-6">Réservation</h2>
                         

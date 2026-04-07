@@ -69,10 +69,18 @@ export const allOrchestre = await contentfulClient.getEntries<Orchestre>({
 })
 
 
-export const concerts = allConcerts.items.map((item) => {
+export const concerts = await Promise.all(allConcerts.items.map(async (item) => {
     const {title, date, description, price} = item.fields;
     let concertDate = new Date(date);
     console.log(item.fields.location)
+
+    let posterUrl: string | null = null;
+    if (item.fields.poster) {
+        const asset = await contentfulClient.getAsset(item.fields.poster.sys.id);
+        const url = asset.fields.file?.url;
+        posterUrl = url ? (url.startsWith('//') ? `https:${url}` : url) : null;
+    }
+
     return {
         title,
         description: documentToHtmlString(description),
@@ -80,9 +88,9 @@ export const concerts = allConcerts.items.map((item) => {
         location: item.fields.location,
         date: concertDate,
         season: getSeason(concertDate),
-        poster: item.fields.poster ? contentfulClient.getAsset(item.fields.poster.sys.id).then(asset => asset.fields.file?.url) : null,
+        poster: posterUrl,
     };
-});
+}));
 
 // Get next concerts (those with dates in the future)
 const today = new Date();

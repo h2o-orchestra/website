@@ -49,7 +49,7 @@ if (date) {
         {poster == null ? (
             <Image src={backgroundImage} alt="Concert poster" class="w-full h-full object-cover opacity-40" />
         ) : (
-            <Image src={poster} alt="Concert poster" class="w-full h-full object-cover opacity-40" />
+            <Image src={poster} inferSize={true} alt="Concert poster" class="w-full h-full object-cover opacity-40" />
         )}
     </div>
     

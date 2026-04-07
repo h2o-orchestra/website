@@ -120,10 +120,7 @@ const { chef, currentConductor } = Astro.props;
                             const shortDescription = plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
                             
                             // Generate URL-friendly slug for the concert
-                            const concertSlug = concert.title.toLowerCase()
-                                .replace(/[^\w\s]/g, '') // Remove special characters
-                                .replace(/\s+/g, '-')    // Replace spaces with hyphens
-                                .replace(/-+/g, '-');    // Remove duplicate hyphens
+                            const concertSlug = concert.title.toLowerCase().replace(/\s+/g, '-');
                             
                             return (
                                 <div class="bg-white p-6 rounded-xl shadow-md">

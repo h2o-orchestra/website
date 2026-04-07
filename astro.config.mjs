@@ -15,4 +15,11 @@ export default defineConfig({
 
   site: 'https://h2o-orchestra.github.io',
   base: '',
+  image: {
+    domains: ["images.ctfassets.net"],
+    remotePatterns: [
+      { protocol: "https", hostname: "images.ctfassets.net" },
+      { protocol: "http", hostname: "images.ctfassets.net" },
+    ],
+  },
 });

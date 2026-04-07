@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css'
 import { seasons } from '../lib/contentful';
-import Logo from '../../public/logo-circle.svg';
 
 interface Props {
 	title: string;
@@ -40,7 +39,7 @@ const currentYear = new Date().getFullYear();
 				<div class="flex justify-between items-center py-4">
 					<!-- Logo -->
 					<a href="/" class="flex items-center space-x-2">
-						<Logo width={50} height={50}  viewBox="0 0 740 740" />
+						<img src="/H2O_final.png" alt="Orchestre H₂O" width={50} height={50} class="h-[50px] w-auto" />
 						<span class="text-xl font-semibold text-h2o-dark">Orchestre H₂O</span>
 					</a>
 					
