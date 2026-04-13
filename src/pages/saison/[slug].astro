@@ -80,7 +80,7 @@ const concertsBySeason = concerts.filter((item) => getSeason(new Date(item.date)
                             <div class="relative z-20 p-8 flex flex-col h-full justify-end">
                                 <div class="mb-auto flex justify-between items-start w-full">
                                     <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-white/90 backdrop-blur-md text-gray-900 shadow-sm">
-                                        {new Date(concert.date).toLocaleDateString("fr-FR", {day: 'numeric', month: 'long', year: 'numeric'})}
+                                        {new Date(concert.date).toLocaleDateString("fr-FR", {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris'})}
                                     </span>
                                 </div>
                                 
